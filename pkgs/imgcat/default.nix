@@ -1,17 +1,18 @@
 { stdenv, ncurses5, imagemagick, graphicsmagick, autoconf }:
 
 let
-  rev = "b4d8fa1679e6971abe2dc44ba4b371345a5c35bf";
+  version = "2.3.0";
+  sha256 = "0m83c33rzxvs0w214njql2c7q3fg06wnyijch3l2s88i7frl121f";
 
 in stdenv.mkDerivation {
-  name = "imgcat-${rev}";
+  name = "imgcat-${version}";
 
   nativeBuildInputs = [ autoconf ];
   buildInputs = [ ncurses5 imagemagick graphicsmagick ];
 
-  src = builtins.fetchGit {
-    url = git://github.com/eddieantonio/imgcat;
-    inherit rev;
+  src = builtins.fetchTarball {
+    url = https://github.com/eddieantonio/imgcat/archive/ + "v${version}.tar.gz";
+    inherit sha256;
   };
 
   preConfigure = ''
