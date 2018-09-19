@@ -4,7 +4,7 @@
 
 ## Setup
 
-1. Fork this repo
+1. Fork this repo ✅
 2. Add your packages to the [pkgs](./pkgs) directory and to
    [default.nix](./default.nix)
    * Remember to mark the broken packages as `broken = true;` in the `meta`
