@@ -27,7 +27,7 @@
 
 **My personal [NUR](https://github.com/kreisys/nur-packages) repository**
 
-[![Build Status](https://travis-ci.com/kreisys/nur-packages.svg?branch=master)](https://travis-ci.com/kreisys/nur-packages)
+[![Build Status](https://travis-ci.org/kreisys/nur-packages.svg?branch=master)](https://travis-ci.org/kreisys/nur-packages)
 [![Cachix Cache](https://img.shields.io/badge/cachix-kreisys-blue.svg)](https://kreisys.cachix.org)
 
 
