@@ -16,6 +16,7 @@
 
   consulate = pkgs.callPackage ./pkgs/consulate { };
   imgcat = pkgs.callPackage ./pkgs/imgcat { };
+  nvim = pkgs.callPackage ./pkgs/nvim { };
   # some-qt5-package = pkgs.libsForQt5.callPackage ./pkgs/some-qt5-package { };
   # ...
 }
