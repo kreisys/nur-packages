@@ -13,8 +13,4 @@
   lib = import ./lib { inherit pkgs; }; # functions
   modules = import ./modules; # NixOS modules
   overlays = import ./overlays; # nixpkgs overlays
-
-  consulate = pkgs.callPackage ./pkgs/consulate { };
-  nvim = pkgs.callPackage ./pkgs/nvim { };
-}
-
+} // import ./pkgs { inherit pkgs; }
