@@ -6,6 +6,7 @@ let
 in
 {
   consulate = pkgs.callPackage ./consulate { };
+  img2ansi = pkgs.callPackage ./img2ansi { };
   nvim = mkB0rked (pkgs.callPackage ./nvim { });
 }
 
