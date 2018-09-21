@@ -1,42 +1,47 @@
-{ vimUtils, vimPlugins, neovim }:
+{ lib, vimUtils, vimPlugins, neovim, fetchgit }:
 
 with vimPlugins;
 let
+  fetchgit' = url: let
+    srcs = lib.importJSON ./srcs.json;
+    src  = srcs.${url};
+  in fetchgit { inherit (src) url rev sha256 fetchSubmodules; };
+
   buildVimPlugin = vimUtils.buildVimPluginFrom2Nix;
 
   oceanic-next = buildVimPlugin {
     name = "oceanic-next";
-    src = builtins.fetchGit https://github.com/mhartington/oceanic-next;
+    src = fetchgit' https://github.com/mhartington/oceanic-next;
     dependencies = [];
   };
 
   vim-nerdtree-syntax-highlight = buildVimPlugin {
     name = "vim-nerdtree-syntax-highlight";
-    src = builtins.fetchGit https://github.com/tiagofumo/vim-nerdtree-syntax-highlight;
+    src = fetchgit' https://github.com/tiagofumo/vim-nerdtree-syntax-highlight;
     dependencies = [];
   };
 
   github-issues = buildVimPlugin {
     name = "github-issues";
-    src = builtins.fetchGit https://github.com/jaxbot/github-issues.vim;
+    src = fetchgit' https://github.com/jaxbot/github-issues.vim;
     dependencies = [];
   };
 
   vim-hashicorp-tools = buildVimPlugin {
     name = "vim-hashicorp-tools";
-    src = builtins.fetchGit https://github.com/hashivim/vim-hashicorp-tools;
+    src = fetchgit' https://github.com/hashivim/vim-hashicorp-tools;
     dependencies = [];
   };
 
   vim-fish = buildVimPlugin {
     name = "vim-fish";
-    src = builtins.fetchGit https://github.com/dag/vim-fish;
+    src = fetchgit' https://github.com/dag/vim-fish;
     dependencies = [];
   };
 
   typescript-vim = buildVimPlugin {
     name = "typescript-vim";
-    src = builtins.fetchGit https://github.com/leafgarland/typescript-vim;
+    src = fetchgit' https://github.com/leafgarland/typescript-vim;
     dependencies = [];
   };
 
