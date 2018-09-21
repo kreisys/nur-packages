@@ -14,4 +14,11 @@ stdenv.mkDerivation {
   installPhase = ''
     install -D ok.sh $out/bin/ok.sh
   '';
+
+  meta = with stdenv.lib; {
+    description = "A Bourne shell GitHub API client library focused on interfacing with shell scripts";
+    homepage = https://github.com/whiteinge/ok.sh;
+    platforms = with platforms; linux ++ darwin;
+    license = licenses.bsd3;
+  };
 }
