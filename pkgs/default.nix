@@ -6,7 +6,7 @@ let
 in
 {
   consul = pkgs.consul.overrideAttrs (_: {
-    src = pkgs.fetchFromGitHub {
+    src    = pkgs.fetchFromGitHub {
       owner  = "hashicorp";
       repo   = "consul";
       rev    = "v1.1.0";
@@ -15,9 +15,9 @@ in
   });
 
   consulate = pkgs.callPackage ./consulate { };
-  img2ansi = pkgs.callPackage ./img2ansi { };
-  nvim = pkgs.callPackage ./nvim { };
-  oksh = pkgs.callPackage ./ok.sh {  };
-  webhook = pkgs.callPackage ./webhook { };
+  img2ansi  = pkgs.callPackage ./img2ansi  { };
+  nvim      = pkgs.callPackage ./nvim      { };
+  oksh      = pkgs.callPackage ./ok.sh     { };
+  webhook   = pkgs.callPackage ./webhook   { };
 }
 
