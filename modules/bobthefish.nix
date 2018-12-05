@@ -77,7 +77,6 @@ in {
   config = mkIf cfg.enable {
     programs = {
       bash = {
-        enable = true;
         interactiveShellInit = ''
           if [[ $SHLVL == 1 ]]; then
             exec fish
@@ -94,7 +93,7 @@ in {
         '';
 
         shellInit = ''
-          mkdir -p $HOME/.local./bin
+          mkdir -p $HOME/.local/bin
           set -gx PATH $HOME/.local/bin $PATH
           fish_vi_key_bindings
           function fish_user_key_bindings
