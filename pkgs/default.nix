@@ -18,6 +18,7 @@ in
   nvim     = pkgs.callPackage ./nvim       { };
   oksh     = pkgs.callPackage ./ok.sh      { };
   webhook  = pkgs.callPackage ./webhook    { };
+  xinomorf = pkgs.callPackage ./xinomorf   { };
 
   # Linux only packages go here
   hydra = pkgs.hydra.overrideAttrs (_: rec {

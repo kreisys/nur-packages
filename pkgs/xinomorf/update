@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+nix-prefetch-git https://github.com/kreisys/xinomorf > pin.json
