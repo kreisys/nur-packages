@@ -20,7 +20,6 @@ in
   webhook  = pkgs.callPackage ./webhook    { };
   xinomorf = (pkgs.callPackage ./xinomorf  { }).cli;
 
-  # Linux only packages go here
   hydra = let
     lastWorkingNixpkgsVersion = pkgs.fetchFromGitHub {
       owner   = "NixOS";
