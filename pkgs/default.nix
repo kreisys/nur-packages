@@ -21,7 +21,17 @@ in
   xinomorf = (pkgs.callPackage ./xinomorf  { }).cli;
 
   # Linux only packages go here
-  hydra = pkgs.hydra.overrideAttrs (_: rec {
+  hydra = let
+    lastWorkingNixpkgsVersion = pkgs.fetchFromGitHub {
+      owner   = "NixOS";
+      repo    = "nixpkgs-channels";
+      rev     = "61c3169a0e17d789c566d5b241bfe309ce4a6275";
+      sha256  = "0qbycg7wkb71v20rchlkafrjfpbk2fnlvvbh3ai9pyfisci5wxvq";
+    };
+
+    lastWorkingNixpkgs = import lastWorkingNixpkgsVersion { inherit (pkgs) system; };
+
+  in lastWorkingNixpkgs.hydra.overrideAttrs (_: rec {
     name    = "hydra-${version}";
     version = "2018-10-15";
     patchs  = [ ./hydra-no-restricteval.diff ];
