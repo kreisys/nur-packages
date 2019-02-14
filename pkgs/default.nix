@@ -20,5 +20,6 @@ in
   nvim     = pkgs.callPackage ./nvim       { };
   oksh     = pkgs.callPackage ./ok.sh      { };
   webhook  = pkgs.callPackage ./webhook    { };
+  vgo2nix  = pkgs.callPackage ./vgo2nix    { };
   xinomorf = (pkgs.callPackage ./xinomorf  { }).cli;
 }
