@@ -9,7 +9,8 @@ let
 
 in
 {
-  consulate = pkgs.callPackage ./consulate { };
+  buildkite-cli = pkgs.callPackage ./buildkite-cli { };
+  consulate     = pkgs.callPackage ./consulate     { };
 
   fishPlugins = pkgs.recurseIntoAttrs (pkgs.callPackages ./fish-plugins { });
 
