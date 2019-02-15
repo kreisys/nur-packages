@@ -1,0 +1,3 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -p nix-prefetch-github -i bash
+nix-prefetch-github adisbladis vgo2nix > pin.json
