@@ -1,24 +1,25 @@
-{ lib, grid, stdenv, bash, writeText }:
+{ lib, grid, stdenv, bash, writeText, runCommand }:
 
 name: description: { env ? {}, options ? [], flags ? [] }: commandsFn: let
 
-  mkCommand = command: description: { aliases ? [], options ? [], flags ? [] }: code: {
-    inherit command description aliases code options flags;
+  mkCommand = name: description: { aliases ? [], commands ? [], options ? [], flags ? [] }: code: rec {
+    inherit name commands description aliases code options flags;
+    command = name;
   };
 
   commands = commandsFn mkCommand;
 
-  mkGetOpts = { options ? [], flags ? [] }: let
-    mkOption = short: long: default: { inherit short long default; };
-    options' = if builtins.isFunction options then options mkOption else options;
+  mkOption = short: long: default: description: { inherit short long default description; };
+  mkFlag   = short: long: description: { inherit short long description; };
 
-    mkFlag = short: long: { inherit short long; };
-    flags' = if builtins.isFunction flags then flags mkFlag else flags;
+  mkGetOpts = { options ? [], flags ? [] }: let
+    flags'   = if builtins.isFunction   flags then   flags mkFlag   else   flags;
+    options' = if builtins.isFunction options then options mkOption else options;
   in ''
     POSITIONAL=()
 
     # Setup defaults
-    ${lib.concatMapStrings ({ long, ...}: ''
+    ${lib.concatMapStrings ({ long, ... }: ''
       ${lib.toUpper long}=false
     '') flags'}
 
@@ -33,13 +34,13 @@ name: description: { env ? {}, options ? [], flags ? [] }: commandsFn: let
     key="$1"
 
     case $key in
-      ${lib.concatMapStrings ({ short, long, ...}:
+      ${lib.concatMapStrings ({ short, long, ... }:
       ''-${short} | --${long} )
         ${lib.toUpper long}=true
         shift
         ;;
         '') flags'}
-      ${lib.concatMapStrings ({ short, long, ...}:
+      ${lib.concatMapStrings ({ short, long, ... }:
       ''-${short} | --${long} )
         ${lib.toUpper long}="$2"
         shift 2
@@ -55,22 +56,55 @@ name: description: { env ? {}, options ? [], flags ? [] }: commandsFn: let
     set -- "''${POSITIONAL[@]}" # restore positional parameters
   '';
 
-  usage = writeText "${name}-usage.txt" ''
-    Usage: ${name} [--version] [--help] <command> [args]
+  usage = writeText "${name}-usage.txt" (mkUsageText { inherit name description flags options commands; });
 
-    Description:
-    ${description}
+  commandsUsage = runCommand "${name}-commands-usage" {} ''
+    mkdir -p $out
+    cd $_
 
-    The available commands for execution are listed below.
+    ${lib.concatMapStrings ({ command, ... }@c: ''
+      cat <<EOF > ${command}
+      ${mkUsageText c}
+      EOF
+    '') commands}
+  '';
 
+  mkUsageText = { name, description, flags, options, commands, ... }: let
+    flags'   = if builtins.isFunction   flags then   flags mkFlag   else   flags;
+    options' = if builtins.isFunction options then options mkOption else options;
+  in ''
+    Usage: ${name} [options/flags] <command> [args]
+
+      ${description}
+
+  '' + (lib.optionalString (flags != []) ''
+    Flags:
+    ${grid.gridToStringLeft (map ({ short, long, description, ... }: [
+      "    "       # indentation
+      "--${long}"  # long form
+      "-${short}"  # short form
+      " |"         # separator
+      description  # description
+    ]) flags')}
+  '') + (lib.optionalString (options != []) ''
+    Options:
+    ${grid.gridToStringLeft (map ({ short, long, default, description, ... }: [
+      "    "       # indentation
+      "--${long}"  # long form
+      "-${short}"  # short form
+      " |"         # separator
+      description  # description
+      "   [ ${if default != null then "default: ${default}" else "required"} ]"
+    ]) options')}
+  '') + (lib.optionalString (commands != []) ''
     Commands:
     ${grid.gridToStringLeft (map ({ command, description, aliases, ... }: [
       "    "                                               # indentation
       (lib.concatStringsSep ", " ([ command ] ++ aliases)) # command name and aliases
       " |"                                                 # separator
-      description                                          # command description
+      description                                          # description
     ]) commands)}
-  '';
+  '');
 
 in stdenv.mkDerivation ({
   inherit name;
@@ -106,6 +140,13 @@ in stdenv.mkDerivation ({
           ${code}
           ;;
         '') commands}
+      help)
+        if [[ -z $1 ]]; then
+          cat ${usage}
+        else
+          cat ${commandsUsage}/$1
+        fi
+        ;;
       *)
         if [[ -n $cmd ]]; then
           err "unknown command: $cmd"
