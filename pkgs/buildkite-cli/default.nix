@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "buildkite-cli-${version}";
-  version = "0.3.0";
+  version = "0.4.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/buildkite/cli";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "buildkite";
     repo  = "cli";
-    sha256 = "18rdnx1a9gwz0gg2l4q7h0imammskavpn9w4la93zjr9fdl4w9jm";
+    sha256 = "1sjh0r10wg1j166dgraqkkssjkix0gwyf8l3y25748r41744ypdn";
   };
 
   goDeps = ./deps.nix;
