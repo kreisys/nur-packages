@@ -19,25 +19,24 @@ name: description: { arguments ? [], aliases ? [], env ? {}, options ? [], flags
       ''}
     '') options}
 
-    while [[ $# -gt 0 ]]
-    do
-    key="$1"
+    while [[ $# > 0 ]]; do
+      key="$1"
 
-    case $key in
-      ${lib.concatMapStrings ({ short, long, ... }:
-      ''-${short} | --${long} )
-        ${lib.toUpper long}=true
-        shift
-        ;;
-        '') (defaultFlags ++ flags)}
-      ${lib.concatMapStrings ({ short, long, ... }:
-      ''-${short} | --${long} )
-        ${lib.toUpper long}="$2"
-        shift 2
-        ;;
-        '') options}
-      *) break ;;
-    esac
+      case $key in
+        ${lib.concatMapStrings ({ short, long, ... }:
+        ''-${short} | --${long} )
+          ${lib.toUpper long}=true
+          shift
+          ;;
+          '') (defaultFlags ++ flags)}
+        ${lib.concatMapStrings ({ short, long, ... }:
+        ''-${short} | --${long} )
+          ${lib.toUpper long}="$2"
+          shift 2
+          ;;
+          '') options}
+        *) break ;;
+      esac
     done
 
     # Assert all options are defined
