@@ -1,24 +1,42 @@
-{ mkBashCli, callPackage }:
+{ lib, mkBashCli, callPackage }:
 
 let
   spinners = callPackage ./spinners.nix {};
-in
-mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
+
+  colors = {
+    black   = "30";
+    red     = "31";
+    green   = "32";
+    yellow  = "33";
+    blue    = "34";
+    magenta = "35";
+    cyan    = "36";
+    white   = "37";
+  };
+
+in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
     [
       (mkCmd "colortest" "Show available tty colours" { aliases = [ "colors" ]; } ''
         awk 'BEGIN{
-            s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
-            for (colnum = 0; colnum<77; colnum++) {
-                r = 255-(colnum*255/76); g = (colnum*510/76);
-                b = (colnum*255/76);
-                if (g>255) g = 510-g;
-                printf "\033[48;2;%d;%d;%dm", r,g,b;
-                printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
-                printf "%s\033[0m", substr(s,colnum+1,1);
-            }
-            printf "\n";
+          s="/\\/\\/\\/\\/\\"; s=s s s s s s s s;
+          for (colnum = 0; colnum<77; colnum++) {
+            r = 255-(colnum*255/76); g = (colnum*510/76);
+            b = (colnum*255/76);
+            if (g>255) g = 510-g;
+            printf "\033[48;2;%d;%d;%dm", r,g,b;
+            printf "\033[38;2;%d;%d;%dm", 255-r,255-g,255-b;
+            printf "%s\033[0m", substr(s,colnum+1,1);
+          }
+          printf "\n";
         }'
       '')
+
+      (mkCmd "color" "Print strings in color" {} (lib.mapAttrsToList (colorName: colorCode: mkCmd colorName "print string in ${colorName}" {
+          arguments = a: [ (a "strings" "string or strings to print") ];
+        } ''
+          echo -e "\e[${colorCode}m"$STRINGS "$@""\e[0m"
+        '') colors)
+      )
 
       (mkCmd "spinners" "List available spinners" {} ''
         ls ${spinners}
