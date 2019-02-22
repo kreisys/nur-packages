@@ -34,7 +34,13 @@ in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
       (mkCmd "color" "Print strings in color" {} (lib.mapAttrsToList (colorName: colorCode: mkCmd colorName "print string in ${colorName}" {
           arguments = a: [ (a "strings" "string or strings to print") ];
         } ''
-          echo -e "\e[${colorCode}m"$STRINGS "$@""\e[0m"
+          echo -en "\e[${colorCode}m"
+          if [[ -t 0 ]]; then
+            echo -e $STRINGS "$@"
+          else
+            cat
+          fi
+          echo -en "\e[0m"
         '') colors)
       )
 
