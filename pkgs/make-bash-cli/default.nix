@@ -149,9 +149,13 @@ name: description: { arguments ? [], aliases ? [], env ? {}, options ? [], flags
 
     '' else ''
 
-    cmd=$1
-
-    if [[ -n $cmd ]]; then shift; fi
+    if [[ $# > 0 ]]; then
+      cmd=$1
+      shift
+    else
+      cat ${usage}
+      exit 1
+    fi
 
     case $cmd in
       ${lib.concatMapStrings ({ name, aliases ? [], ... }@c: ''
