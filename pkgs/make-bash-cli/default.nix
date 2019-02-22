@@ -184,7 +184,7 @@ in stdenv.mkDerivation ({
     cat <<'EOF' | shfmt -i 2 > ${name}
     #!${bash}/bin/bash
 
-    set -eo pipefail
+    set -euo pipefail
 
     stderr() {
       1>&2 echo -e "$@"
