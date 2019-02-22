@@ -16,8 +16,9 @@ in
 
   hydra    = mkB0rked (pkgs.callPackage ./hydra {});
   img2ansi = pkgs.callPackage ./img2ansi   { };
-  krec2    = pkgs.callPackage ./krec2.nix  { inherit mkBashCli; };
-  kretty   = pkgs.callPackage ./kretty     { inherit mkBashCli; };
+  krec2    = pkgs.callPackage ./kreiscripts/krec2  { inherit mkBashCli; };
+  kretty   = pkgs.callPackage ./kreiscripts/kretty { inherit mkBashCli; };
+  kurl     = pkgs.callPackage ./kreiscripts/kurl   { inherit mkBashCli; };
   nvim     = pkgs.callPackage ./nvim       { };
   oksh     = pkgs.callPackage ./ok.sh      { };
   webhook  = pkgs.callPackage ./webhook    { };
