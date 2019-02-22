@@ -24,16 +24,19 @@ mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
         ls ${spinners}
       '')
 
-      (mkCmd "spinner" "Play a spinner until interrupted" { aliases = [ "spin" ]; } ''
+      (mkCmd "spinner" "Play a spinner until interrupted" {
+        aliases = [ "spin" ];
+        arguments = a: [ (a "spinner" "name of the spinner to be played") ];
+      } ''
         trap 'tput cnorm' EXIT
         tput civis
 
-        if ! [[ -f ${spinners}/$1 ]]; then
-          >&2 echo "I don't know how to spin $1 sry"
+        if ! [[ -f ${spinners}/$SPINNER ]]; then
+          >&2 echo "I don't know how to spin $SPINNER sry"
           exit 1
         fi
 
-        source ${spinners}/$1
+        source ${spinners}/$SPINNER
 
         # This is so that we get the right length of emojis
         LANG=C LC_ALL=C
