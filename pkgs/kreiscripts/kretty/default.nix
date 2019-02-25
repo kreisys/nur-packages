@@ -3,17 +3,6 @@
 let
   spinners = callPackage ./spinners.nix {};
 
-  colors = {
-    black   = "30";
-    red     = "31";
-    green   = "32";
-    yellow  = "33";
-    blue    = "34";
-    magenta = "35";
-    cyan    = "36";
-    white   = "37";
-  };
-
 in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
     [
       (mkCmd "colortest" "Show available tty colours" { aliases = [ "colors" ]; } ''
@@ -31,7 +20,19 @@ in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
         }'
       '')
 
-      (mkCmd "color" "Print strings in color" {} (lib.mapAttrsToList (colorName: colorCode: mkCmd colorName "print string in ${colorName}" {
+      (mkCmd "color" "Print strings in color" {}
+        (let
+          colors = {
+            black   = "30";
+            red     = "31";
+            green   = "32";
+            yellow  = "33";
+            blue    = "34";
+            magenta = "35";
+            cyan    = "36";
+            white   = "37";
+          };
+        in lib.mapAttrsToList (colorName: colorCode: mkCmd colorName "print string in ${colorName}" {
           arguments = a: [ (a "strings" "string or strings to print") ];
         } ''
           echo -en "\e[${colorCode}m"
@@ -41,7 +42,8 @@ in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
             cat
           fi
           echo -en "\e[0m"
-        '') colors)
+        ''
+        ) colors)
       )
 
       (mkCmd "spinners" "List available spinners" {} ''
@@ -52,8 +54,12 @@ in mkBashCli "kretty" "placeholder for random tty scriptlets" {} (mkCmd:
         aliases = [ "spin" ];
         arguments = a: [ (a "spinner" "name of the spinner to be played") ];
       } ''
-        trap 'tput cnorm' EXIT
+        # This gets rid of the cursor (takes away from the spinner)
         tput civis
+
+        # This brings the cursor back
+        trap 'tput cnorm' EXIT
+
 
         if ! [[ -f ${spinners}/$SPINNER ]]; then
           >&2 echo "I don't know how to spin $SPINNER sry"
