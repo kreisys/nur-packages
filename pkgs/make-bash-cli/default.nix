@@ -1,6 +1,6 @@
 { lib, grid, stdenv, bash, shfmt, linkFarm, writeText, runCommand }:
 
-name: description: { arguments ? [], aliases ? [], env ? {}, options ? [], flags ? [] }: action: let
+name: description: { arguments ? [], aliases ? [], options ? [], flags ? [] }: action: let
   defaultFlags = [ (mkFlag "h" "help" "show help") ];
 
   mkArgument = name:                 description: { inherit name               description; };
@@ -211,4 +211,4 @@ in stdenv.mkDerivation ({
   checkPhase = ''
     true
   '';
-} // env)
+})
