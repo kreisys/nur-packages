@@ -13,7 +13,7 @@ in buildGoPackage rec {
   goPackagePath     = "github.com/adisbladis/vgo2nix";
   nativeBuildInputs = [ makeWrapper ];
   src               = fetchFromGitHub pin;
-  goDeps            = src + "/deps.nix";
+  goDeps            = ./deps.nix;
   allowGoReference  = true;
 
   postInstall = with stdenv; let
