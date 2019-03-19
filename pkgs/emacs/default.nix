@@ -1,7 +1,7 @@
-{ emacsPackagesNgGen, emacsMacport, emacs, runCommand, stdenv }:
+{ emacsPackagesNgGen, emacsMacport, emacs26, runCommand, stdenv }:
 
 let
-  emacs = if stdenv.isDarwin then emacsMacport else emacs;
+  emacs = if stdenv.isDarwin then emacsMacport else emacs26;
   inherit (emacsPackagesNgGen emacs) emacsWithPackages;
 in emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [
   (runCommand "site-lisp" {} ''
