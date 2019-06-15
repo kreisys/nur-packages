@@ -1,33 +1,28 @@
-{ pkgs }:
+{ pkgs, lib, newScope, recurseIntoAttrs }:
 
-let
-  # Here mk stands for mark
-  mkB0rked = pkgs.lib.addMetaAttrs { broken = true; };
-  mkBashCli = pkgs.callPackage ./make-bash-cli {
+lib.makeScope newScope (self: with self; let
+  callPackages = lib.callPackagesWith (pkgs // self);
+in {
+  mkBashCli = callPackage ./make-bash-cli {
     inherit (import ../lib { inherit pkgs; }) grid;
   };
 
-in
-{
-  inherit (pkgs) buildkite-agent3 consul dep2nix direnv exa ipfs;
-  inherit (pkgs.gitAndTools) hub;
+  buildkite-cli = callPackage ./buildkite-cli { };
+  consulate     = callPackage ./consulate     { };
+  emacs         = callPackage ./emacs         { };
 
-  buildkite-cli = pkgs.callPackage ./buildkite-cli { };
-  consulate     = pkgs.callPackage ./consulate     { };
-  emacs         = pkgs.callPackage ./emacs         { };
+  fishPlugins = recurseIntoAttrs (callPackages ./fish-plugins { });
 
-  fishPlugins = pkgs.recurseIntoAttrs (pkgs.callPackages ./fish-plugins { });
-
-  img2ansi = pkgs.callPackage ./img2ansi   { };
-  kraks    = pkgs.callPackage ./kreiscripts/kraks  { inherit mkBashCli; };
-  krec2    = pkgs.callPackage ./kreiscripts/krec2  { inherit mkBashCli; };
-  kretty   = pkgs.callPackage ./kreiscripts/kretty { inherit mkBashCli; };
-  kurl     = pkgs.callPackage ./kreiscripts/kurl   { inherit mkBashCli; };
-  lorri    = pkgs.callPackage ./lorri      { };
-  nvim     = pkgs.callPackage ./nvim       { };
-  oksh     = pkgs.callPackage ./ok.sh      { };
-  pragmatapro = pkgs.callPackage ./pragmatapro.nix {};
-  webhook  = pkgs.callPackage ./webhook    { };
-  vgo2nix  = pkgs.callPackage ./vgo2nix    { };
-  xinomorf = (pkgs.callPackage ./xinomorf  { }).cli;
-}
+  img2ansi = callPackage ./img2ansi   { };
+  kraks    = callPackage ./kreiscripts/kraks  { };
+  krec2    = callPackage ./kreiscripts/krec2  { };
+  kretty   = callPackage ./kreiscripts/kretty { };
+  kurl     = callPackage ./kreiscripts/kurl   { };
+  lorri    = callPackage ./lorri      { };
+  nvim     = callPackage ./nvim       { };
+  oksh     = callPackage ./ok.sh      { };
+  pragmatapro = callPackage ./pragmatapro.nix {};
+  webhook  = callPackage ./webhook    { };
+  vgo2nix  = callPackage ./vgo2nix    { };
+  xinomorf = (callPackage ./xinomorf  { }).cli;
+})
