@@ -11,11 +11,13 @@ name: description: { arguments ? [], aliases ? [], options ? [], flags ? [] }: a
     # Setup defaults
     ${lib.concatMapStrings ({ long, ... }: ''
       ${lib.toUpper long}=false
+      ${long}=false
     '') (defaultFlags ++ flags)}
 
     ${lib.concatMapStrings ({ long, default ? null, ...}: ''
       ${lib.optionalString (default != null) ''
         ${lib.toUpper long}="${default}"
+        ${long}="${default}"
       ''}
     '') options}
 
@@ -26,12 +28,14 @@ name: description: { arguments ? [], aliases ? [], options ? [], flags ? [] }: a
         ${lib.concatMapStrings ({ short, long, ... }:
         ''-${short} | --${long} )
           ${lib.toUpper long}=true
+          ${long}=true
           shift
           ;;
           '') (defaultFlags ++ flags)}
         ${lib.concatMapStrings ({ short, long, ... }:
         ''-${short} | --${long} )
           ${lib.toUpper long}="$2"
+          ${long}="$2"
           shift 2
           ;;
           '') options}
@@ -133,6 +137,7 @@ name: description: { arguments ? [], aliases ? [], options ? [], flags ? [] }: a
       ${lib.concatMapStrings ({ name, ...}: ''
         if [[ $# > 0 ]]; then
           ${lib.toUpper name}=$1
+          ${name}=$1
           shift
         else
           err "argument '${name}' has not been specified"
