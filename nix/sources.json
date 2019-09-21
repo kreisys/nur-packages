@@ -1,4 +1,29 @@
 {
+    "emacs-26_3": {
+        "branch": "emacs-26.3",
+        "description": "Mirror of GNU Emacs",
+        "homepage": "http://www.gnu.org/software/emacs/",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "96dd0196c28bc36779584e47fffcca433c9309cd",
+        "sha256": "0s5szdgs6pmj1x8brca7403jvv61s4xq19g4s0bfgiwvqzv0f6d5",
+        "type": "builtin-tarball",
+        "url": "https://github.com/emacs-mirror/emacs/archive/96dd0196c28bc36779584e47fffcca433c9309cd.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
+        "version": "26.3"
+    },
+    "emacs-master": {
+        "branch": "master",
+        "description": "Mirror of GNU Emacs",
+        "homepage": "http://www.gnu.org/software/emacs/",
+        "owner": "emacs-mirror",
+        "repo": "emacs",
+        "rev": "d49d6ea9677eea1d30aae4244934b1c7336e35a3",
+        "sha256": "021bhsndkmd56mlz51199m8h4j3zi6v4yf60w68v9kfp30jpijmz",
+        "type": "builtin-tarball",
+        "url": "https://github.com/emacs-mirror/emacs/archive/d49d6ea9677eea1d30aae4244934b1c7336e35a3.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
     "niv": {
         "branch": "master",
         "description": "Easy dependency management for Nix projects",
