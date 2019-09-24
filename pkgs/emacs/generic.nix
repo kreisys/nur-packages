@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm
 , Xaw3d, libXcursor,  pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf, jansson
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO, m17n_lib, libotf, jansson, harfbuzz
 , autoconf, automake, texinfo
 , systemd      ? null
 , withX        ? !stdenv.isDarwin
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
-    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson ]
+    [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext jansson harfbuzz ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux systemd ]
     ++ lib.optionals withX
       [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft

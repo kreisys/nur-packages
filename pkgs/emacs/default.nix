@@ -7,13 +7,14 @@ let
     inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
     inherit imagemagick;
 
-    acl     = null;
-    alsaLib = null;
-    gconf   = null;
-    gpm     = null;
-    libXaw  = xorg.libXaw;
-    Xaw3d   = null;
-    jansson = null;
+    acl      = null;
+    alsaLib  = null;
+    gconf    = null;
+    gpm      = null;
+    harfbuzz = null;
+    libXaw   = xorg.libXaw;
+    Xaw3d    = null;
+    jansson  = null;
 
     src     = sources.emacs-26_3;
     version = "26.3";
