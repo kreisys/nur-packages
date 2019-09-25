@@ -11,6 +11,8 @@ in {
   buildkite-cli = callPackage ./buildkite-cli { };
   consulate     = callPackage ./consulate     { };
 
+  docker-distribution = callPackage ./docker-distribution     { };
+
   inherit (emacsen) emacs26 emacs27;
 
   fishPlugins = recurseIntoAttrs (callPackages ./fish-plugins { });
