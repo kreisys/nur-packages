@@ -4,19 +4,19 @@ let
   mkEmacs = args: let
     commonArgs = {
       inherit (darwin.apple_sdk.frameworks) AppKit GSS ImageIO;
+      gconf   = null;
     } // (lib.optionalAttrs stdenv.isDarwin darwinArgs);
 
     darwinArgs = {
       acl     = null;
       alsaLib = null;
-      gconf   = null;
+      gpm     = null;
     };
   in callPackage ./generic.nix (commonArgs // args);
 
   emacs26 = mkEmacs {
     inherit imagemagick;
 
-    gpm      = null;
     harfbuzz = null;
     libXaw   = xorg.libXaw;
     Xaw3d    = null;
