@@ -59,5 +59,18 @@
         "type": "tarball",
         "url": "https://github.com/NixOS/nixpkgs-channels/archive/a7e559a5504572008567383c3dc8e142fa7a8633.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
+    },
+    "silver": {
+        "branch": "v1.1.0",
+        "description": "A cross-shell customizable powerline-like prompt with icons",
+        "homepage": null,
+        "owner": "reujab",
+        "repo": "silver",
+        "rev": "5186183758704c288f56da43aee43829572664bf",
+        "sha256": "0p992lvsvs0fr2dksb84h9xyzxxwi8y3720zz2b7l5yg61brz72m",
+        "type": "tarball",
+        "url": "https://github.com/reujab/silver/archive/5186183758704c288f56da43aee43829572664bf.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
+        "version": "v1.1.0"
     }
 }
