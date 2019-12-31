@@ -14,7 +14,7 @@ in {
     inherit (import ../lib { inherit pkgs; }) grid;
   };
 
-  inherit (emacsen) emacs26 emacs27 emacs27-lucid;
+  inherit (emacsen) emacs26 emacs27 emacs27-lucid emacsMacport;
 
   fishPlugins = recurseIntoAttrs (callPackages ./fish-plugins { });
 
