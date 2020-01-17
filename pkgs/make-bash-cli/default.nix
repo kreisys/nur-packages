@@ -108,7 +108,18 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
 
   mkUsage = { name, ... }@c: writeText "${name}-usage.txt" (mkUsageText c);
 
-  mkCli = { action, name, description, init ? "", arguments ? [], flags ? [], options ? [], previous ? [], packages ? [], ... }@c:
+  mkCli =
+    { action
+    , name
+    , description
+    , init      ? ""
+    , arguments ? []
+    , flags     ? []
+    , options   ? []
+    , previous  ? []
+    , packages  ? []
+    , ... }@c:
+
     assert ! builtins.isString action -> arguments == [];
   let
     mkCommand = name: description: { init ? "", arguments ? [], aliases ? [], options ? [], flags ? [], packages ? [] }: action: {
@@ -215,6 +226,14 @@ in stdenv.mkDerivation ({
     warn() {
       stderr "\e[33mwarning\e[0m:" "$@"
     }
+
+    cleanup() {
+      chmod -R +w $TMP
+      rm -rf $_
+    }
+
+    TMP=$(mktemp -d --tmpdir ${name}.XXXXXX)
+    trap cleanup EXIT
 
     ${mkCli { inherit arguments action name description options flags init packages; } }
 
