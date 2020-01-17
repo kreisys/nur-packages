@@ -1,4 +1,4 @@
-{ lib, grid, stdenv, bashInteractive, shfmt, linkFarm, writeText, runCommand }:
+{ lib, grid, stdenv, bashInteractive, shfmt, writeText, runCommand }:
 
 name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], flags ? [], preInit ? "", init ? "" }: action: let
   defaultFlags = [ (mkFlag "h" "help" "show help") ];
