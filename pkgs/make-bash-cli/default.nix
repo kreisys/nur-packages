@@ -112,7 +112,7 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     { action
     , name
     , description
-    , preInit      ? ""
+    , preInit   ? ""
     , init      ? ""
     , arguments ? []
     , flags     ? []
@@ -143,6 +143,8 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     currentName = name;
 
   in ''
+    PATH=${lib.makeBinPath packages}:$PATH
+
     ${preInit}
 
     ${mkGetOpts (c // {
@@ -151,8 +153,6 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
       options = options';
       flags   = flags';
     })}
-
-    PATH=${lib.makeBinPath packages}:$PATH
 
     ${init}
 
