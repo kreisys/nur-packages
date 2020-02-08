@@ -23,6 +23,7 @@ in {
   docker-auth         = callPackage ./docker-auth         { };
   docker-distribution = callPackage ./docker-distribution { };
   img2ansi            = callPackage ./img2ansi            { };
+  image-to-ascii      = callPackage ./image-to-ascii      { };
   kraks               = callPackage ./kreiscripts/kraks   { };
   krec2               = callPackage ./kreiscripts/krec2   { };
   kretty              = callPackage ./kreiscripts/kretty  { };
