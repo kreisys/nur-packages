@@ -90,5 +90,17 @@
         "url": "https://github.com/kreisys/silver/archive/6a1f0fd911270e5863d540965a0c5e7b40a44369.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
         "version": "v1.2.0"
+    },
+    "yabai": {
+        "branch": "master",
+        "description": "A tiling window manager for macOS based on binary space partitioning",
+        "homepage": null,
+        "owner": "koekeishiya",
+        "repo": "yabai",
+        "rev": "68a4ac14822af2216ee8ce20ae8450eedce15a52",
+        "sha256": "1f2hfi7hpnz5lynnpxs3mh4gndld55jbv2878r8b6mrlxn8x1cgx",
+        "type": "tarball",
+        "url": "https://github.com/koekeishiya/yabai/archive/68a4ac14822af2216ee8ce20ae8450eedce15a52.tar.gz",
+        "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz"
     }
 }

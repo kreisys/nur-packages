@@ -34,6 +34,7 @@ in {
   oksh                = callPackage ./ok.sh               { };
   pragmatapro         = callPackage ./pragmatapro.nix     { };
   silver              = callPackage ./silver              { };
-  webhook             = callPackage ./webhook             { };
   vgo2nix             = callPackage ./vgo2nix             { };
+  webhook             = callPackage ./webhook             { };
+  yabai               = callPackage ./yabai               { };
 })
