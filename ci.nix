@@ -15,10 +15,14 @@ with builtins;
 
 let
 
-  isReserved = n: n == "lib" || n == "overlays" || n == "modules";
+  isReserved   = n: n == "lib" || n == "overlays" || n == "modules";
   isDerivation = p: isAttrs p && p ? type && p.type == "derivation";
-  isBuildable = p: !(p.meta.broken or false) && p.meta.license.free or true && elem currentSystem p.meta.platforms;
-  isCacheable = p: !(p.preferLocalBuild or false);
+  isCompatible = p: elem currentSystem p.meta.platforms;
+  isFree       = p: p.meta.license.free or true;
+  isUnbroken   = p: !(p.meta.broken or false);
+  isBuildable  = p: all (map (pred: pred p) [ isCompatible isFree isUnbroken ]);
+  isCacheable  = p: !(p.preferLocalBuild or false);
+
   shouldRecurseForDerivations = p: isAttrs p && p.recurseForDerivations or false;
 
   nameValuePair = n: v: { name = n; value = v; };
