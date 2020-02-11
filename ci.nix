@@ -20,7 +20,7 @@ let
   isCompatible = p: elem currentSystem p.meta.platforms;
   isFree       = p: p.meta.license.free or true;
   isUnbroken   = p: !(p.meta.broken or false);
-  isBuildable  = p: all (map (pred: pred p) [ isCompatible isFree isUnbroken ]);
+  isBuildable  = p: all (pred: pred p) [ isCompatible isFree isUnbroken ];
   isCacheable  = p: !(p.preferLocalBuild or false);
 
   shouldRecurseForDerivations = p: isAttrs p && p.recurseForDerivations or false;
