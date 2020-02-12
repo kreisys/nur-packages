@@ -17,7 +17,7 @@ let
   in mapTestOn (packagePlatforms pkgs);
 
   sanitizedPkgs =  let
-    isBuildable = p: !(p.meta.broken or false) && p.meta.license.free or false;
+    isBuildable = p: !(p.meta.broken or false) && p.meta.license.free or true;
     nullNonDrvs = mapAttrsRecursiveCond
     (as: ! isDerivation as && ! as ? __functor)
     (_: v: if isDerivation v && isBuildable v then v else null)
