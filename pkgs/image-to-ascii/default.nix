@@ -9,7 +9,7 @@ in rustPlatform.buildRustPackage rec {
 
   inherit src;
 
-  cargoSha256 = "sha256-o10EpVZDOpNO1wHxMXk7M+DllFr6qbIjw8KYFq/NH0M=";
+  cargoSha256 = "sha256:01i8i8p08rcz61i1mmmz54lzm69w0miq2gdy2zkgzcccyv6p3xv5";
 
   meta = {
     inherit (src) description;
