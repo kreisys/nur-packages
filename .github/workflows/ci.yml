@@ -684,44 +684,6 @@
         }
       ]
     },
-    "lorri-x86_64-darwin": {
-      "runs-on": "macos-latest",
-      "steps": [
-        {
-          "uses": "actions/checkout@v2"
-        },
-        {
-          "uses": "cachix/install-nix-action@v8"
-        },
-        {
-          "uses": "cachix/cachix-action@v5",
-          "with": {
-            "attributes": "lorri",
-            "name": "kreisys",
-            "signingKey": "'${{ secrets.CACHIX_SIGNING_KEY }}'"
-          }
-        }
-      ]
-    },
-    "lorri-x86_64-linux": {
-      "runs-on": "ubuntu-latest",
-      "steps": [
-        {
-          "uses": "actions/checkout@v2"
-        },
-        {
-          "uses": "cachix/install-nix-action@v8"
-        },
-        {
-          "uses": "cachix/cachix-action@v5",
-          "with": {
-            "attributes": "lorri",
-            "name": "kreisys",
-            "signingKey": "'${{ secrets.CACHIX_SIGNING_KEY }}'"
-          }
-        }
-      ]
-    },
     "nvim-x86_64-darwin": {
       "runs-on": "macos-latest",
       "steps": [
