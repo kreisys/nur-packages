@@ -6,7 +6,7 @@
 # commands such as:
 #     nix-build -A mypackage
 
-{ pkgs    ? import <nixpkgs> args
+{ pkgs    ? import sources.nixpkgs args
 , sources ? import nix/sources.nix
 , system  ? builtins.currentSystem, ... }@args:
 
