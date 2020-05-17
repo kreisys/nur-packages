@@ -1,7 +1,10 @@
-{ lib, grid, stdenv, bashInteractive, shfmt, writeText, runCommand }:
+{ coreutils, lib, grid, stdenv, bashInteractive, shfmt, writeText, runCommand, utillinux }:
 
-name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], flags ? [], preInit ? "", init ? "" }: action: let
-  defaultFlags = [ (mkFlag "h" "help" "show help") ];
+with lib;
+
+name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], flags ? [], preInit ? "", init ? "", meta ? {} }: action: let
+  defaultFlags = [ (mkFlag "h" "help" "show help")
+                   (mkFlag "p" "porcelain" "opt for machine-friendly output") ];
 
   mkArgument = name:                 description: { inherit name               description; };
   mkFlag     = short: long:          description: { inherit short long         description; };
@@ -9,14 +12,14 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
 
   mkGetOpts = { usage, options ? [], flags ? [], ... }: ''
     # Setup defaults
-    ${lib.concatMapStrings ({ long, ... }: ''
-      ${lib.toUpper long}=false
+    ${concatMapStrings ({ long, ... }: ''
+      ${toUpper long}=false
       ${long}=false
     '') (defaultFlags ++ flags)}
 
-    ${lib.concatMapStrings ({ long, default ? null, ...}: ''
-      ${lib.optionalString (default != null) ''
-        ${lib.toUpper long}="${default}"
+    ${concatMapStrings ({ long, default ? null, ...}: ''
+      ${optionalString (default != null) ''
+        ${toUpper long}="${default}"
         ${long}="${default}"
       ''}
     '') options}
@@ -25,16 +28,16 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
       key="$1"
 
       case $key in
-        ${lib.concatMapStrings ({ short, long, ... }:
+        ${concatMapStrings ({ short, long, ... }:
         ''-${short} | --${long} )
-          ${lib.toUpper long}=true
+          ${toUpper long}=true
           ${long}=true
           shift
           ;;
           '') (defaultFlags ++ flags)}
-        ${lib.concatMapStrings ({ short, long, ... }:
+        ${concatMapStrings ({ short, long, ... }:
         ''-${short} | --${long} )
-          ${lib.toUpper long}="$2"
+          ${toUpper long}="$2"
           ${long}="$2"
           shift 2
           ;;
@@ -44,27 +47,41 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     done
 
     # Assert all options are defined
-    ${lib.concatMapStrings ({ long, ...}: ''
-      if ! [[ -v ${lib.toUpper long} ]] && ! $HELP; then
+    ${concatMapStrings ({ long, ... }: ''
+      if ! [[ -v ${toUpper long} ]] && ! $HELP; then
         err "required option '${long}' has not been set"
-        opts_failed=
+        exit=1
+        HELP=true
       fi
     '') options}
 
-    if [[ -v opts_failed ]] || $HELP; then
-      . ${usage}
-      exit 1
+    if $HELP; then
+      exit=0
+      if $PORCELAIN; then
+        printf -- "${name}\t${description}\n"
+      else
+        . ${usage}
+
+        if compgen -c ${name}- &>/dev/null; then
+          echo 'Addon Commands:'
+          compgen -c ${name}- | sed 's/$/ --help --porcelain/' | bash | sort | uniq | sed 's/^${name}-/   /' | sed 's/\t/#| /' | column -t -s#
+        fi
+      fi
+    fi
+
+    if [[ -v exit ]]; then
+      exit $exit
     fi
   '';
 
   mkUsageText = { name, description, arguments ? [], flags ? [], options ? [], commands ? [], previous ? [], ... }: let
     hasCommands = commands != [] && ! builtins.isString commands;
     usageText = ''
-      Usage: ${lib.concatStringsSep " " (previous ++ [ name ])} [options/flags] ${lib.optionalString hasCommands "<command> "}${lib.concatMapStringsSep " " ({ name, ... }: "<${name}>") arguments}
+      Usage: ${concatStringsSep " " (previous ++ [ name ])} [options/flags] ${optionalString hasCommands "<command> "}${concatMapStringsSep " " ({ name, ... }: "<${name}>") arguments}
 
         ${description}
 
-    '' + (lib.optionalString (arguments != []) ''
+    '' + (optionalString (arguments != []) ''
       Arguments:
       ${grid.gridToStringLeft (map ({ name, description, ... }: [
         "    "       # indentation
@@ -72,7 +89,7 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
         " |"         # separator
         description  # description
       ]) arguments)}
-    '') + (lib.optionalString ((defaultFlags ++ flags) != []) ''
+    '') + (optionalString ((defaultFlags ++ flags) != []) ''
       Flags:
       ${grid.gridToStringLeft (map ({ short, long, description, ... }: [
         "    "       # indentation
@@ -81,7 +98,7 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
         " |"         # separator
         description  # description
       ]) (defaultFlags ++ flags))}
-    '') + (lib.optionalString (options != []) ''
+    '') + (optionalString (options != []) ''
       Options:
       ${grid.gridToStringLeft (map ({ short, long, default, description, ... }: [
         "    "       # indentation
@@ -91,11 +108,11 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
         description  # description
         "   [ ${if default != null then "default: ${default}" else "required"} ]"
       ]) options)}
-    '') + (lib.optionalString hasCommands ''
+    '') + (optionalString hasCommands ''
       Commands:
       ${grid.gridToStringLeft (map ({ name, description, aliases ? [], ... }: [
         "    "                                            # indentation
-        (lib.concatStringsSep ", " ([ name ] ++ aliases)) # command name and aliases
+        (concatStringsSep ", " ([ name ] ++ aliases)) # command name and aliases
         " |"                                              # separator
         description                                       # description
       ]) commands)}
@@ -143,7 +160,7 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     currentName = name;
 
   in ''
-    PATH=${lib.makeBinPath packages}:$PATH
+    PATH=${makeBinPath packages}:$PATH
 
     ${preInit}
 
@@ -157,9 +174,9 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     ${init}
 
     ${if builtins.isString commands then ''
-      ${lib.concatMapStrings ({ name, ...}: ''
+      ${concatMapStrings ({ name, ...}: ''
         if [[ $# > 0 ]]; then
-          ${lib.toUpper name}=$1
+          ${toUpper name}=$1
           ${name}=$1
           shift
         else
@@ -186,8 +203,8 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
     fi
 
     case $cmd in
-      ${lib.concatMapStrings ({ name, aliases ? [], ... }@c: ''
-        ${name}${lib.optionalString (aliases != []) "|${lib.concatStringsSep "|" aliases}"})
+      ${concatMapStrings ({ name, aliases ? [], ... }@c: ''
+        ${name}${optionalString (aliases != []) "|${concatStringsSep "|" aliases}"})
           ${mkCli (c // { previous = previous ++ [ currentName ]; })}
           ;;
         '') commands}
@@ -203,7 +220,7 @@ name: description: { packages ? [], arguments ? [], aliases ? [], options ? [], 
   '';
 
 in stdenv.mkDerivation ({
-  inherit name;
+  inherit name meta;
 
   phases      = [ "buildPhase" "checkPhase" ];
   buildInputs = [ shfmt ];
@@ -218,12 +235,19 @@ in stdenv.mkDerivation ({
 
     set -euo pipefail
 
+    PATH=${lib.makeBinPath [ coreutils ]}:$PATH
+
     stderr() {
       1>&2 echo -e "$@"
     }
 
     err() {
       stderr "\e[31merror\e[0m:" "$@"
+    }
+
+    fatal() {
+      stderr "\e[31mfatal\e[0m:" "$@"
+      exit 1
     }
 
     warn() {
@@ -235,6 +259,18 @@ in stdenv.mkDerivation ({
       rm -rf $_
     }
 
+    trap_add() {
+      trap_add_cmd=$1; shift || fatal "$FUNCNAME usage error"
+      for trap_add_name in "$@"; do
+        trap -- "$(
+          extract_trap_cmd() { printf '%s\n' "$3"; }
+          eval "extract_trap_cmd $(trap -p "$trap_add_name")"
+          printf '%s\n' "$trap_add_cmd"
+        )" "$trap_add_name" \
+          || fatal "unable to add to trap $trap_add_name"
+      done
+    }
+
     TMP=$(mktemp -d --tmpdir ${name}.XXXXXX)
     trap cleanup EXIT
 
@@ -243,7 +279,7 @@ in stdenv.mkDerivation ({
     EOF
 
     chmod +x ${name}
-    ${lib.concatMapStrings (alias: ''
+    ${concatMapStrings (alias: ''
       ln -s ${name} ${alias}
     '') aliases}
   '';
@@ -251,6 +287,4 @@ in stdenv.mkDerivation ({
   checkPhase = ''
     true
   '';
-
-  meta.platforms = stdenv.lib.platforms.all;
 })
