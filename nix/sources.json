@@ -97,10 +97,10 @@
         "homepage": null,
         "owner": "kreisys",
         "repo": "silver",
-        "rev": "fa09cf0066ba950084c3aae69418e56af7da8426",
-        "sha256": "08jjrwvkhbpzf2fiik3231smlsf7m0ljw1j4xbc7w0sxcn79jka8",
+        "rev": "52b1b6163c048d6d5022704fd4889c65da5d9ee8",
+        "sha256": "1im0j7v9qniqa1xs7538qzysmh2bsgfq53gzqikpw0n7qqh2a0g1",
         "type": "tarball",
-        "url": "https://github.com/kreisys/silver/archive/fa09cf0066ba950084c3aae69418e56af7da8426.tar.gz",
+        "url": "https://github.com/kreisys/silver/archive/52b1b6163c048d6d5022704fd4889c65da5d9ee8.tar.gz",
         "url_template": "https://github.com/<owner>/<repo>/archive/<rev>.tar.gz",
         "version": "v1.2.0"
     },
