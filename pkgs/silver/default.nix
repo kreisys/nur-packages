@@ -8,7 +8,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ pkgconfig openssl libiconv ]
               ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-  cargoSha256 = "sha256:0chdy38nl4yi20klraml9v1jpn1r10aicbyqjpi7q99kmvx06vnq";
+  cargoSha256 = "sha256-aURY13f2t3NLQNd2dp5XXYmswfT6TQogNpydUqEb7MQ=";
 
   OPENSSL_LIB_DIR = openssl.out + "/lib";
   OPENSSL_INCLUDE_DIR = openssl.dev + "/include";
